@@ -4,12 +4,17 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.media.AudioDeviceInfo;
 import android.media.AudioManager;
 import android.view.WindowInsets;
+import android.view.Gravity;
+import android.view.ViewGroup;
 import android.widget.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,6 +49,16 @@ public final class MainActivity extends Activity {
             return insets;
         });
         setContentView(root);
+        ImageButton shidulab = new ImageButton(this);
+        shidulab.setBackground(null);
+        @SuppressWarnings("DiscouragedApi")
+        int logoId = getResources().getIdentifier("botologo", "drawable", getPackageName());
+        shidulab.setImageResource(logoId);
+        shidulab.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        shidulab.setPadding(dp(6), 0, dp(6), 0);
+        shidulab.setContentDescription("ShiduLab. Apri il sito");
+        shidulab.setOnClickListener(view -> openLink("https://www.shidulab.org/"));
+        root.addView(shidulab, new LinearLayout.LayoutParams(dp(124), dp(52)));
         root.addView(title("AppArecchio", 28));
         status = new TextView(this);
         status.setTextSize(16);
@@ -66,9 +81,8 @@ public final class MainActivity extends Activity {
         scroll.addView(panel);
         gain = slider("Guadagno", -24, 12, -12, " dB");
         panel.addView(title("BustaBanda", 22));
-        for (int i = 0; i < bands.length; i++) {
-            bands[i] = slider(BustaBanda.FREQUENCIES[i] + " Hz", -12, 6, 0, " dB");
-        }
+        addBands();
+        button("Azzera bande", this::resetBands);
         noise = slider("Riduzione rumore", 0, 3, 0, "");
         panel.addView(title("Ascolto ambientale", 22));
         voice = settingSwitch("Enfasi voce", false);
@@ -78,6 +92,10 @@ public final class MainActivity extends Activity {
         button("Salva profilo", this::saveProfile);
         button("Carica profilo", this::loadProfile);
         button("Ripristina controlli", () -> apply("-12,0,0,0,0,0,0"));
+        Button support = link("♥  Il tuo supporto", "https://paypal.me/JostaSeu");
+        support.setContentDescription("Il tuo supporto. Apri PayPal");
+        support.setAllCaps(false);
+        panel.addView(support);
         if (state != null) apply(state.getString("controls", "-12,0,0,0,0,0,0"));
     }
 
@@ -124,27 +142,74 @@ public final class MainActivity extends Activity {
         value.setImportantForAccessibility(TextView.IMPORTANT_FOR_ACCESSIBILITY_NO);
         panel.addView(value);
         SeekBar bar = new SeekBar(this);
+        panel.addView(bar);
+        bindSlider(bar, value, label, min, max, initial, unit, false);
+        return bar;
+    }
+
+    private void addBands() {
+        LinearLayout row = new LinearLayout(this);
+        int minimumColumn = dp(54);
+        row.setMinimumWidth(minimumColumn * bands.length);
+        HorizontalScrollView strip = new HorizontalScrollView(this);
+        strip.setFillViewport(true);
+        panel.addView(strip);
+        strip.addView(row, new ViewGroup.LayoutParams(-2, -2));
+        for (int i = 0; i < bands.length; i++) {
+            LinearLayout column = new LinearLayout(this);
+            column.setOrientation(LinearLayout.VERTICAL);
+            row.addView(column, new LinearLayout.LayoutParams(minimumColumn, -2, 1));
+            TextView value = new TextView(this);
+            value.setTextSize(13);
+            value.setGravity(Gravity.CENTER);
+            value.setImportantForAccessibility(TextView.IMPORTANT_FOR_ACCESSIBILITY_NO);
+            column.addView(value);
+            VerticalBand band = new VerticalBand(this);
+            column.addView(band, new LinearLayout.LayoutParams(-1, dp(156)));
+            bands[i] = band.slider;
+            bindSlider(band.slider, value, BustaBanda.FREQUENCIES[i] + " Hz",
+                    BustaBanda.EXCLUDED, 6, 0, " dB", true);
+        }
+    }
+
+    private void bindSlider(SeekBar bar, TextView value, String label, int min, int max,
+                            int initial, String unit, boolean stacked) {
         bar.setMax(max - min);
         bar.setProgress(initial - min);
         bar.setContentDescription(label);
         bar.setMinimumHeight(dp(48));
-        panel.addView(bar);
-        showValue(value, bar, label, initial, unit);
+        showValue(value, bar, label, initial, unit, stacked);
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override public void onProgressChanged(SeekBar item, int progress, boolean fromUser) {
-                showValue(value, item, label, progress + min, unit);
+                showValue(value, item, label, progress + min, unit, stacked);
                 publishSettings();
             }
             @Override public void onStartTrackingTouch(SeekBar item) {}
             @Override public void onStopTrackingTouch(SeekBar item) {}
         });
-        return bar;
     }
 
-    private void showValue(TextView display, SeekBar bar, String label, int value, String unit) {
+    private void showValue(TextView display, SeekBar bar, String label, int value, String unit, boolean stacked) {
         String setting = unit.isEmpty() && value == 0 ? "Spenta" : value + unit;
-        display.setText(label + "   " + setting);
+        if (stacked && value == BustaBanda.EXCLUDED) setting = "Esclusa";
+        display.setText(label + (stacked ? "\n" : "   ") + setting);
         if (android.os.Build.VERSION.SDK_INT >= 30) bar.setStateDescription(setting);
+    }
+
+    private Button link(String label, String address) {
+        Button button = new Button(this);
+        button.setText(label);
+        button.setMinHeight(dp(48));
+        button.setOnClickListener(view -> openLink(address));
+        return button;
+    }
+
+    private void openLink(String address) {
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(address)));
+        } catch (ActivityNotFoundException unavailable) {
+            Toast.makeText(this, "Non c’è un browser disponibile.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void button(String label, Runnable action) {
@@ -169,9 +234,16 @@ public final class MainActivity extends Activity {
         if (!applyingProfile) ListeningService.updateSettings(settings());
     }
 
+    private void resetBands() {
+        applyingProfile = true;
+        for (SeekBar band : bands) band.setProgress(-BustaBanda.EXCLUDED);
+        applyingProfile = false;
+        publishSettings();
+    }
+
     private ListeningSession.Settings settings() {
         int[] eq = new int[bands.length];
-        for (int i = 0; i < bands.length; i++) eq[i] = bands[i].getProgress() - 12;
+        for (int i = 0; i < bands.length; i++) eq[i] = bands[i].getProgress() + BustaBanda.EXCLUDED;
         return new ListeningSession.Settings(eq, gain.getProgress() - 24, noise.getProgress(),
                 voice.isChecked(), dynamics.isChecked(), impulse.isChecked());
     }
@@ -203,7 +275,7 @@ public final class MainActivity extends Activity {
         applyingProfile = true;
         gain.setProgress(values[0] + 24);
         noise.setProgress(values[1]);
-        for (int i = 0; i < bands.length; i++) bands[i].setProgress(values[i + 2] + 12);
+        for (int i = 0; i < bands.length; i++) bands[i].setProgress(values[i + 2] - BustaBanda.EXCLUDED);
         boolean extended = values.length > originalLength;
         voice.setChecked(extended && values[originalLength] == 1);
         dynamics.setChecked(extended && values[originalLength + 1] == 1);

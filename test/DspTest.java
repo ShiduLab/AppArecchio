@@ -28,6 +28,14 @@ public final class DspTest {
         if (rms(1000, flat, 6, 0, 500) < reference * 1.9) throw new AssertionError("Gain");
         if (rms(1000, flat, 0, 3, 500) > reference * .5) throw new AssertionError("Noise gate");
         if (rms(1000, boost, 12, 0, 32000) < 1000) throw new AssertionError("Limiter output");
+        for (int band = 0; band < BustaBanda.FREQUENCIES.length; band++) {
+            int[] cut = new int[5];
+            cut[band] = BustaBanda.EXCLUDED;
+            int center = BustaBanda.FREQUENCIES[band];
+            if (rms(center, cut, 0, 0, 500) > 1) throw new AssertionError("Band exclusion " + center);
+            if (rms((int) (center * 1.06), cut, 0, 0, 500) < reference * .9)
+                throw new AssertionError("Nearby tone " + center);
+        }
         System.out.println("OK: unity, EQ, gain, noise gate, peak ceiling");
     }
 }

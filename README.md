@@ -1,8 +1,8 @@
-# AppArecchio J.1
+# AppArecchio Tattico J.1.4
 
 AppArecchio è un’app Android di ShiduLab per regolare l’ascolto di voci e suoni nell’ambiente. Usa il microfono integrato del telefono e riproduce il segnale in mono nelle cuffie. L’elaborazione avviene sul dispositivo. L’app conserva i profili nella memoria privata, non salva registrazioni e non richiede accesso alla rete.
 
-[Scarica AppArecchio J.1 dalla release](https://github.com/ShiduLab/AppArecchio/releases/tag/J.1) · [Pagina di AppArecchio su ShiduLab](https://www.shidulab.org/SofficiWare-ShiduLab/AppArecchio-Tattico.html)
+[Scarica APK J.1.4](downloads/AppArecchio-J.1.4.apk) · [Pagina di AppArecchio su ShiduLab](https://www.shidulab.org/SofficiWare-ShiduLab/AppArecchio-Tattico.html)
 
 ## BustaBanda e controlli
 
@@ -37,3 +37,7 @@ Lo script compila il progetto e genera un APK firmato con una chiave locale. Per
 ![Guadagno, BustaBanda e riduzione rumore](schermate/AppArecchio-BustaBanda.png)
 
 ![Controlli di ascolto ambientale e profili locali](schermate/AppArecchio-Controlli.png)
+
+## Novità della J.1.4
+
+BustaBanda ha cinque cursori verticali. A fondo corsa il filtro sopprime la frequenza indicata. Azzera bande riporta i cursori a 0 dB. Il Botologo apre ShiduLab e il cuore apre PayPal. Icona della Home con sfondo antracite.

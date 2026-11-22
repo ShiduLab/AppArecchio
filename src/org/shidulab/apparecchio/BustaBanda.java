@@ -1,6 +1,7 @@
 package org.shidulab.apparecchio;
 
 final class BustaBanda {
+    static final int EXCLUDED = -13;
     static final int[] FREQUENCIES = {250, 500, 1000, 2000, 4000};
     private final Band[] bands = new Band[FREQUENCIES.length];
     private final int rate;
@@ -74,18 +75,19 @@ final class BustaBanda {
     }
 
     private static final class Band {
-        private double b0 = 1, b1, b2, a2, shared;
+        private double b0 = 1, b2, a2, shared;
         private double targetB0 = 1, targetB2, targetA2;
         private double x1, x2, y1, y2;
 
         void configure(double omega, int db) {
-            double amplitude = Math.pow(10, db / 40.0);
-            double alpha = Math.sin(omega) / (2 * 1.4);
+            boolean excluded = db == EXCLUDED;
+            double amplitude = excluded ? 1 : Math.pow(10, db / 40.0);
+            double alpha = Math.sin(omega) / (2 * (excluded ? 25 : 1.4));
+            double boost = excluded ? 0 : alpha * amplitude;
             double a0 = 1 + alpha / amplitude;
-            targetB0 = (1 + alpha * amplitude) / a0;
-            b1 = -2 * Math.cos(omega);
-            shared = b1 / a0;
-            targetB2 = (1 - alpha * amplitude) / a0;
+            targetB0 = (1 + boost) / a0;
+            shared = -2 * Math.cos(omega) / a0;
+            targetB2 = (1 - boost) / a0;
             targetA2 = (1 - alpha / amplitude) / a0;
             // Initialize the poles before processing; subsequent changes interpolate
             // between stable coefficient sets.
