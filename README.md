@@ -1,8 +1,8 @@
 # AppArecchio J.1
 
-AppArecchio è un prototipo Android di ShiduLab per regolare l’ascolto di voci e suoni nell’ambiente. Usa il microfono integrato del telefono e riproduce il segnale in mono nelle cuffie. L’elaborazione avviene sul dispositivo. L’app conserva i profili nella memoria privata, non salva registrazioni e non richiede accesso alla rete.
+AppArecchio è un’app Android di ShiduLab per regolare l’ascolto di voci e suoni nell’ambiente. Usa il microfono integrato del telefono e riproduce il segnale in mono nelle cuffie. L’elaborazione avviene sul dispositivo. L’app conserva i profili nella memoria privata, non salva registrazioni e non richiede accesso alla rete.
 
-[Pagina di AppArecchio su ShiduLab](https://www.shidulab.org/SofficiWare-ShiduLab/AppArecchio-Tattico.html)
+[Scarica AppArecchio J.1 dalla release](https://github.com/ShiduLab/AppArecchio/releases/tag/J.1) · [Pagina di AppArecchio su ShiduLab](https://www.shidulab.org/SofficiWare-ShiduLab/AppArecchio-Tattico.html)
 
 ## BustaBanda e controlli
 
@@ -12,7 +12,7 @@ L’app offre tre livelli di riduzione del rumore, enfasi della voce, compressio
 
 ## Samsung Galaxy A15 e requisiti Android
 
-Il Samsung Galaxy A15 è il dispositivo di riferimento. Il manifesto dichiara Android 11 o successivo, API minima 30, e target API 35. Servono il microfono integrato e cuffie riconosciute da Android. Il prototipo prevede l’uscita jack da 3,5 mm, dispositivi USB riconosciuti come cuffie e dispositivi Bluetooth esposti da Android come A2DP o LE Audio. Il percorso Bluetooth per le chiamate SCO è escluso.
+Il Samsung Galaxy A15 è il dispositivo di riferimento. Il manifesto dichiara Android 11 o successivo, API minima 30, e target API 35. Servono il microfono integrato e cuffie riconosciute da Android. L’app prevede l’uscita jack da 3,5 mm, dispositivi USB riconosciuti come cuffie e dispositivi Bluetooth esposti da Android come A2DP o LE Audio. Il percorso Bluetooth per le chiamate SCO è escluso.
 
 Collega le cuffie, abbassa il volume multimediale e avvia l’ascolto dall’app aperta. Android richiede il permesso del microfono e può chiedere quello delle notifiche. Il servizio in primo piano consente di continuare l’ascolto mentre si usano altre app. L’app verifica il percorso audio e richiede l’arresto se cambia.
 
@@ -20,21 +20,17 @@ Collega le cuffie, abbassa il volume multimediale e avvia l’ascolto dall’app
 
 Il motore elabora PCM a 48 kHz in blocchi da 5 ms. La durata di un blocco descrive soltanto l’elaborazione interna. Il ritardo effettivo dipende da acquisizione, buffer, sistema e cuffie. Alla disconnessione possono restare campioni già accodati. La riduzione del rumore può attenuare le voci deboli e il controllo dei suoni deboli può alzare il rumore di fondo.
 
-Il limitatore digitale non misura la pressione sonora all’orecchio. AppArecchio è un prototipo assistenziale privo di calibrazione clinica. Non va usato come protezione dell’udito. Per le prime prove usa un volume basso.
+Il limitatore digitale non misura la pressione sonora all’orecchio. AppArecchio è un’app assistenziale privo di calibrazione clinica. Non va usato come protezione dell’udito. Per le prime prove usa un volume basso.
 
 ## Sorgenti e compilazione
 
-I sorgenti Java si trovano in `src`, le risorse Android in `res` e le prove audio sintetiche in `test`. Per compilare su Windows servono PowerShell, JDK 21, Android SDK Platform 35 e Build Tools 35.0.0.
+I sorgenti Java si trovano in `src`, le risorse Android in `res`. Per compilare su Windows servono PowerShell, JDK 21, Android SDK Platform 35 e Build Tools 35.0.0.
 
 ```powershell
 .\Build.ps1 -Sdk 'C:\percorso\Android\Sdk' -Destination .\pacchetto
 ```
 
-Lo script esegue i test, compila il progetto e genera un APK di prova firmato con una chiave locale. Per aggiornare una build già installata occorre la stessa chiave. Conserva la chiave generata fuori dal controllo versione.
-
-## Stato di sviluppo
-
-J.1 è un prototipo. I due programmi di test coprono il guadagno, i filtri, la riduzione dei segnali deboli, il limite dei picchi e la risposta dinamica a segnali sintetici. Il collaudo sul Galaxy A15 di installazione, instradamento, scollegamento, TalkBack e latenza lungo i diversi percorsi audio rimane da confermare.
+Lo script compila il progetto e genera un APK firmato con una chiave locale. Per aggiornare una build già installata occorre la stessa chiave. Conserva la chiave generata fuori dal controllo versione.
 
 ## Schermate
 
