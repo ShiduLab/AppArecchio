@@ -1,0 +1,10 @@
+/build/
+/pacchetto/
+*.apk
+*.idsig
+*.class
+*.p12
+*.jks
+*.keystore
+local.properties
+.env
