@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -20,7 +21,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public final class MainActivity extends Activity {
-    private final SeekBar[] bands = new SeekBar[5];
+    private static final int DEFAULT_GAIN = -12;
+    private static final int DEFAULT_NOISE = 0;
+    private final SeekBar[] bands = new SeekBar[BustaBanda.FREQUENCIES.length];
+    private final int[] frequencies = BustaBanda.FREQUENCIES.clone();
+    private final int[] widths = new int[bands.length];
+    private final Button[] bandControls = new Button[bands.length];
     private LinearLayout panel;
     private TextView status;
     private SeekBar gain, noise;
@@ -40,15 +46,23 @@ public final class MainActivity extends Activity {
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setBackgroundColor(0xff141617);
-        root.setPadding(dp(20), dp(10), dp(20), dp(8));
+        root.setPadding(dp(14), dp(10), dp(14), dp(8));
         root.setOnApplyWindowInsetsListener((view, insets) -> {
             android.graphics.Insets safe = insets.getInsets(
                     WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
-            view.setPadding(dp(20) + safe.left, dp(10) + safe.top,
-                    dp(20) + safe.right, dp(8) + safe.bottom);
+            view.setPadding(dp(14) + safe.left, dp(10) + safe.top,
+                    dp(14) + safe.right, dp(8) + safe.bottom);
             return insets;
         });
         setContentView(root);
+        LinearLayout header = new LinearLayout(this);
+        header.setGravity(Gravity.CENTER_VERTICAL);
+        root.addView(header, new LinearLayout.LayoutParams(-1, -2));
+        ScrollView scroll = new ScrollView(this);
+        root.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1));
+        panel = new LinearLayout(this);
+        panel.setOrientation(LinearLayout.VERTICAL);
+        scroll.addView(panel);
         ImageButton shidulab = new ImageButton(this);
         shidulab.setBackground(null);
         @SuppressWarnings("DiscouragedApi")
@@ -58,32 +72,28 @@ public final class MainActivity extends Activity {
         shidulab.setPadding(dp(6), 0, dp(6), 0);
         shidulab.setContentDescription("ShiduLab. Apri il sito");
         shidulab.setOnClickListener(view -> openLink("https://www.shidulab.org/"));
-        root.addView(shidulab, new LinearLayout.LayoutParams(dp(124), dp(52)));
-        root.addView(title("AppArecchio", 28));
+        header.addView(shidulab, new LinearLayout.LayoutParams(dp(124), dp(52)));
+        panel.addView(title("AppArecchio", 28));
         status = new TextView(this);
         status.setTextSize(16);
         status.setText("Ascolto fermo. Collega le cuffie e parti a volume basso.");
         status.setAccessibilityLiveRegion(TextView.ACCESSIBILITY_LIVE_REGION_POLITE);
-        root.addView(status);
+        panel.addView(status);
         toggle = new Button(this);
-        toggle.setText("Avvia ascolto");
+        toggle.setText("Ascolta");
         toggle.setMinHeight(dp(52));
         toggle.setOnClickListener(view -> {
             if (ListeningService.isBusy()) ListeningService.stopFromScreen();
             else requestStart();
         });
-        root.addView(toggle);
+        LinearLayout.LayoutParams action = new LinearLayout.LayoutParams(0, -2, 1);
+        action.setMarginStart(dp(8));
+        header.addView(toggle, action);
 
-        ScrollView scroll = new ScrollView(this);
-        root.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1));
-        panel = new LinearLayout(this);
-        panel.setOrientation(LinearLayout.VERTICAL);
-        scroll.addView(panel);
-        gain = slider("Guadagno", -24, 12, -12, " dB");
+        gain = slider("Guadagno", -24, 12, DEFAULT_GAIN, " dB");
         panel.addView(title("BustaBanda", 22));
         addBands();
-        button("Azzera bande", this::resetBands);
-        noise = slider("Riduzione rumore", 0, 3, 0, "");
+        noise = slider("Riduzione rumore", 0, 3, DEFAULT_NOISE, "");
         panel.addView(title("Ascolto ambientale", 22));
         voice = settingSwitch("Enfasi voce", false);
         dynamics = settingSwitch("Suoni deboli", false);
@@ -111,7 +121,7 @@ public final class MainActivity extends Activity {
         if (running != null) apply(encode(running));
         ListeningService.observe(state -> {
             status.setText(state.message());
-            toggle.setText(state.busy() ? "Ferma ascolto" : "Avvia ascolto");
+            toggle.setText(state.busy() ? "Ferma ascolto" : "Ascolta");
             toggle.setEnabled(!state.stopping() && (!state.busy() || ListeningService.activeSettings() != null));
         });
     }
@@ -137,45 +147,119 @@ public final class MainActivity extends Activity {
     }
 
     private SeekBar slider(String label, int min, int max, int initial, String unit) {
+        LinearLayout heading = new LinearLayout(this);
+        heading.setGravity(Gravity.CENTER_VERTICAL);
+        panel.addView(heading);
         TextView value = new TextView(this);
         value.setTextSize(16);
         value.setImportantForAccessibility(TextView.IMPORTANT_FOR_ACCESSIBILITY_NO);
-        panel.addView(value);
+        heading.addView(value, new LinearLayout.LayoutParams(0, -2, 1));
         SeekBar bar = new SeekBar(this);
+        heading.addView(resetButton(label, bar, initial - min), resetSize());
         panel.addView(bar);
         bindSlider(bar, value, label, min, max, initial, unit, false);
         return bar;
     }
 
     private void addBands() {
-        LinearLayout row = new LinearLayout(this);
-        int minimumColumn = dp(54);
-        row.setMinimumWidth(minimumColumn * bands.length);
-        HorizontalScrollView strip = new HorizontalScrollView(this);
+        java.util.Arrays.fill(widths, BustaBanda.DEFAULT_Q);
+        panel.addView(title("10 bande · Scorri a lato. Tocca Hz per frequenza e Q.", 14));
+        BandStrip strip = new BandStrip(this);
         strip.setFillViewport(true);
-        panel.addView(strip);
+        strip.setHorizontalScrollBarEnabled(true);
+        strip.setScrollbarFadingEnabled(false);
+        panel.addView(strip, new LinearLayout.LayoutParams(-1, -2));
+        LinearLayout row = new LinearLayout(this);
+        row.setBaselineAligned(false);
         strip.addView(row, new ViewGroup.LayoutParams(-2, -2));
         for (int i = 0; i < bands.length; i++) {
             LinearLayout column = new LinearLayout(this);
             column.setOrientation(LinearLayout.VERTICAL);
-            row.addView(column, new LinearLayout.LayoutParams(minimumColumn, -2, 1));
+            row.addView(column, new LinearLayout.LayoutParams(dp(68), -2, 1));
             TextView value = new TextView(this);
             value.setTextSize(13);
             value.setGravity(Gravity.CENTER);
+            value.setMinLines(3);
             value.setImportantForAccessibility(TextView.IMPORTANT_FOR_ACCESSIBILITY_NO);
+            final int index = i;
+            Button options = new Button(this);
+            options.setTextSize(11);
+            options.setPadding(0, 0, 0, 0);
+            options.setMinWidth(0);
+            options.setMinimumWidth(0);
+            options.setOnClickListener(view -> editBand(index));
+            bandControls[i] = options;
+            updateBandControl(i);
+            column.addView(options, new LinearLayout.LayoutParams(-1, dp(48)));
             column.addView(value);
             VerticalBand band = new VerticalBand(this);
             column.addView(band, new LinearLayout.LayoutParams(-1, dp(156)));
             bands[i] = band.slider;
-            bindSlider(band.slider, value, BustaBanda.FREQUENCIES[i] + " Hz",
+            String label = "Banda " + (i + 1);
+            bindSlider(band.slider, value, label,
                     BustaBanda.EXCLUDED, 6, 0, " dB", true);
+            LinearLayout.LayoutParams reset = resetSize();
+            reset.gravity = Gravity.CENTER_HORIZONTAL;
+            column.addView(resetButton(label, band.slider, -BustaBanda.EXCLUDED), reset);
         }
+    }
+
+    private void updateBandControl(int index) {
+        bandControls[index].setText(frequencies[index] + " Hz");
+        bandControls[index].setContentDescription("Modifica frequenza e Q, banda " + (index + 1));
+    }
+
+    private void editBand(int index) {
+        LinearLayout fields = new LinearLayout(this);
+        fields.setOrientation(LinearLayout.VERTICAL);
+        fields.setPadding(dp(20), dp(8), dp(20), 0);
+        EditText frequency = new EditText(this);
+        frequency.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
+        frequency.setContentDescription("Frequenza in hertz");
+        frequency.setText(String.valueOf(frequencies[index]));
+        EditText width = new EditText(this);
+        width.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        width.setContentDescription("Q della banda");
+        width.setText(String.valueOf(widths[index] / 100.0));
+        fields.addView(title("Frequenza in Hz", 14));
+        fields.addView(frequency);
+        fields.addView(title("Q · più alto, banda più stretta", 14));
+        fields.addView(width);
+        AlertDialog dialog = new AlertDialog.Builder(this).setTitle("Banda " + (index + 1))
+                .setView(fields).setNegativeButton("Annulla", null)
+                .setNeutralButton("Ripristina", (box, which) -> setBand(index,
+                        BustaBanda.FREQUENCIES[index], BustaBanda.DEFAULT_Q))
+                .setPositiveButton("Applica", null).create();
+        dialog.setOnShowListener(ignored -> dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                .setOnClickListener(view -> {
+                    int hz;
+                    double q;
+                    try { hz = Integer.parseInt(frequency.getText().toString().trim()); }
+                    catch (NumberFormatException e) { hz = 0; }
+                    try { q = Double.parseDouble(width.getText().toString().trim().replace(',', '.')); }
+                    catch (NumberFormatException e) { q = 0; }
+                    if (hz < 20 || hz > 20000) { frequency.setError("Da 20 a 20000 Hz"); return; }
+                    if (!(q >= .3 && q <= 12)) { width.setError("Da 0,3 a 12"); return; }
+                    setBand(index, hz, (int) Math.round(q * 100));
+                    dialog.dismiss();
+                }));
+        dialog.show();
+    }
+
+    private void setBand(int index, int frequency, int q) {
+        frequencies[index] = frequency;
+        widths[index] = q;
+        updateBandControl(index);
+        publishSettings();
     }
 
     private void bindSlider(SeekBar bar, TextView value, String label, int min, int max,
                             int initial, String unit, boolean stacked) {
         bar.setMax(max - min);
         bar.setProgress(initial - min);
+        bar.setThumbTintList(null);
+        bar.setThumb(getDrawable(drawableId("mixer_thumb")));
+        bar.setProgressTintList(ColorStateList.valueOf(0xff79a9b4));
         bar.setContentDescription(label);
         bar.setMinimumHeight(dp(48));
         showValue(value, bar, label, initial, unit, stacked);
@@ -192,8 +276,27 @@ public final class MainActivity extends Activity {
     private void showValue(TextView display, SeekBar bar, String label, int value, String unit, boolean stacked) {
         String setting = unit.isEmpty() && value == 0 ? "Spenta" : value + unit;
         if (stacked && value == BustaBanda.EXCLUDED) setting = "Esclusa";
-        display.setText(label + (stacked ? "\n" : "   ") + setting);
+        display.setText(stacked ? label.replace(' ', '\n') + "\n" + setting : label + "   " + setting);
         if (android.os.Build.VERSION.SDK_INT >= 30) bar.setStateDescription(setting);
+    }
+
+    private LinearLayout.LayoutParams resetSize() {
+        return new LinearLayout.LayoutParams(dp(48), dp(48));
+    }
+
+    private ImageButton resetButton(String label, SeekBar slider, int defaultProgress) {
+        ImageButton reset = new ImageButton(this);
+        android.util.TypedValue background = new android.util.TypedValue();
+        getTheme().resolveAttribute(android.R.attr.selectableItemBackground, background, true);
+        reset.setBackgroundResource(background.resourceId);
+        reset.setImageResource(drawableId("reset_control"));
+        reset.setContentDescription("Ripristina " + label);
+        reset.setOnClickListener(view -> slider.setProgress(defaultProgress));
+        return reset;
+    }
+
+    private int drawableId(String name) {
+        return getResources().getIdentifier(name, "drawable", getPackageName());
     }
 
     private Button link(String label, String address) {
@@ -234,17 +337,10 @@ public final class MainActivity extends Activity {
         if (!applyingProfile) ListeningService.updateSettings(settings());
     }
 
-    private void resetBands() {
-        applyingProfile = true;
-        for (SeekBar band : bands) band.setProgress(-BustaBanda.EXCLUDED);
-        applyingProfile = false;
-        publishSettings();
-    }
-
     private ListeningSession.Settings settings() {
         int[] eq = new int[bands.length];
         for (int i = 0; i < bands.length; i++) eq[i] = bands[i].getProgress() + BustaBanda.EXCLUDED;
-        return new ListeningSession.Settings(eq, gain.getProgress() - 24, noise.getProgress(),
+        return new ListeningSession.Settings(eq, frequencies.clone(), widths.clone(), gain.getProgress() - 24, noise.getProgress(),
                 voice.isChecked(), dynamics.isChecked(), impulse.isChecked());
     }
 
@@ -258,14 +354,19 @@ public final class MainActivity extends Activity {
         data.append(',').append(active.voice() ? 1 : 0)
                 .append(',').append(active.dynamics() ? 1 : 0)
                 .append(',').append(active.impulse() ? 1 : 0);
+        for (int i = 0; i < BustaBanda.FREQUENCIES.length; i++)
+            data.append(',').append(active.frequencies() == null ? BustaBanda.FREQUENCIES[i] : active.frequencies()[i]);
+        for (int i = 0; i < BustaBanda.FREQUENCIES.length; i++)
+            data.append(',').append(active.widths() == null ? BustaBanda.DEFAULT_Q : active.widths()[i]);
         return data.toString();
     }
 
     private void apply(String data) {
         if (data == null) return;
         String[] fields = data.split(",");
-        int originalLength = bands.length + 2;
-        if (fields.length != originalLength && fields.length != originalLength + 3) return;
+        boolean legacy = fields.length == 7 || fields.length == 10;
+        int originalLength = legacy ? 7 : 2 + bands.length;
+        if (!legacy && fields.length != originalLength + 3 + 2 * bands.length) return;
         int[] values = new int[fields.length];
         try {
             for (int i = 0; i < fields.length; i++) values[i] = Integer.parseInt(fields[i]);
@@ -275,7 +376,14 @@ public final class MainActivity extends Activity {
         applyingProfile = true;
         gain.setProgress(values[0] + 24);
         noise.setProgress(values[1]);
-        for (int i = 0; i < bands.length; i++) bands[i].setProgress(values[i + 2] - BustaBanda.EXCLUDED);
+        for (int i = 0; i < bands.length; i++) {
+            int old = i - BustaBanda.LEGACY_OFFSET;
+            int db = legacy ? (old >= 0 && old < 5 ? values[old + 2] : 0) : values[i + 2];
+            bands[i].setProgress(db - BustaBanda.EXCLUDED);
+            frequencies[i] = legacy ? BustaBanda.FREQUENCIES[i] : Math.max(20, Math.min(20000, values[originalLength + 3 + i]));
+            widths[i] = legacy ? BustaBanda.DEFAULT_Q : Math.max(30, Math.min(1200, values[originalLength + 3 + bands.length + i]));
+            updateBandControl(i);
+        }
         boolean extended = values.length > originalLength;
         voice.setChecked(extended && values[originalLength] == 1);
         dynamics.setChecked(extended && values[originalLength + 1] == 1);

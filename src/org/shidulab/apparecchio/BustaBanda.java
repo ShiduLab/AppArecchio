@@ -2,7 +2,9 @@ package org.shidulab.apparecchio;
 
 final class BustaBanda {
     static final int EXCLUDED = -13;
-    static final int[] FREQUENCIES = {250, 500, 1000, 2000, 4000};
+    static final int[] FREQUENCIES = {31, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000};
+    static final int LEGACY_OFFSET = 3;
+    static final int DEFAULT_Q = 140;
     private final Band[] bands = new Band[FREQUENCIES.length];
     private final int rate;
     private final double limiterRelease;
@@ -28,12 +30,21 @@ final class BustaBanda {
     }
 
     void configure(int[] eq, int gainDb, int noise, boolean voice, boolean dynamics, boolean impulse) {
+        configure(eq, null, null, gainDb, noise, voice, dynamics, impulse);
+    }
+
+    void configure(int[] eq, int[] frequencies, int[] widths, int gainDb, int noise,
+                   boolean voice, boolean dynamics, boolean impulse) {
         this.voice = voice;
         this.dynamics = dynamics;
         this.impulse = impulse;
         if (!impulse) impulseHold = 0;
         for (int i = 0; i < bands.length; i++) {
-            bands[i].configure(2 * Math.PI * FREQUENCIES[i] / rate, eq[i]);
+            int source = eq.length == 5 ? i - LEGACY_OFFSET : i;
+            int db = source >= 0 && source < eq.length ? eq[source] : 0;
+            int frequency = frequencies == null ? FREQUENCIES[i] : frequencies[i];
+            double q = widths == null ? DEFAULT_Q / 100.0 : widths[i] / 100.0;
+            bands[i].configure(2 * Math.PI * Math.min(frequency, rate * .45) / rate, db, q);
         }
         targetGain = Math.pow(10, gainDb / 20.0);
         threshold = noise == 0 ? 0 : Math.pow(10, (-60 + 10 * noise) / 20.0);
@@ -79,10 +90,10 @@ final class BustaBanda {
         private double targetB0 = 1, targetB2, targetA2;
         private double x1, x2, y1, y2;
 
-        void configure(double omega, int db) {
+        void configure(double omega, int db, double q) {
             boolean excluded = db == EXCLUDED;
             double amplitude = excluded ? 1 : Math.pow(10, db / 40.0);
-            double alpha = Math.sin(omega) / (2 * (excluded ? 25 : 1.4));
+            double alpha = Math.sin(omega) / (2 * (excluded ? 25 : q));
             double boost = excluded ? 0 : alpha * amplitude;
             double a0 = 1 + alpha / amplitude;
             targetB0 = (1 + boost) / a0;

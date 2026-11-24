@@ -32,7 +32,8 @@ public final class ListeningService extends Service {
     private boolean watchingDevices;
 
     private final AudioDeviceCallback devices = new AudioDeviceCallback() {
-        @Override public void onAudioDevicesRemoved(AudioDeviceInfo[] removed) {
+
+    @Override public void onAudioDevicesRemoved(AudioDeviceInfo[] removed) {
             for (AudioDeviceInfo device : removed) {
                 if (device.getId() == inputId || device.getId() == outputId) {
                     stop("Dispositivo scollegato. Ascolto fermato.");
@@ -69,7 +70,8 @@ public final class ListeningService extends Service {
         if (isBusy()) return;
         Intent intent = new Intent(context, ListeningService.class)
                 .putExtra("input", input).putExtra("output", output)
-                .putExtra("bands", settings.bands()).putExtra("gain", settings.gain())
+                .putExtra("bands", settings.bands()).putExtra("frequencies", settings.frequencies())
+                .putExtra("widths", settings.widths()).putExtra("gain", settings.gain())
                 .putExtra("noise", settings.noise()).putExtra("voice", settings.voice())
                 .putExtra("dynamics", settings.dynamics()).putExtra("impulse", settings.impulse());
         report(new State(true, false, "Verifica del percorso audio in corso."));
@@ -115,7 +117,8 @@ public final class ListeningService extends Service {
                 return START_NOT_STICKY;
             }
 
-            settings = new ListeningSession.Settings(bands, intent.getIntExtra("gain", -12),
+            settings = new ListeningSession.Settings(bands, bandExtra(intent, "frequencies", 20, 20000),
+                    bandExtra(intent, "widths", 30, 1200), intent.getIntExtra("gain", -12),
                     intent.getIntExtra("noise", 0), intent.getBooleanExtra("voice", false),
                     intent.getBooleanExtra("dynamics", false), intent.getBooleanExtra("impulse", true));
             session = new ListeningSession(microphone, headphones, settings,
@@ -193,5 +196,11 @@ public final class ListeningService extends Service {
         }
         releaseAudio();
         super.onDestroy();
+    }
+    private static int[] bandExtra(Intent intent, String key, int min, int max) {
+        int[] values = intent.getIntArrayExtra(key);
+        if (values == null || values.length != BustaBanda.FREQUENCIES.length) return null;
+        for (int value : values) if (value < min || value > max) return null;
+        return values;
     }
 }

@@ -18,7 +18,7 @@ final class ListeningSession {
     static final AudioAttributes ATTRIBUTES = new AudioAttributes.Builder()
             .setUsage(AudioAttributes.USAGE_MEDIA)
             .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build();
-    record Settings(int[] bands, int gain, int noise, boolean voice, boolean dynamics, boolean impulse) {}
+    record Settings(int[] bands, int[] frequencies, int[] widths, int gain, int noise, boolean voice, boolean dynamics, boolean impulse) {}
 
     private final AudioDeviceInfo microphone, headphones;
     private final Handler main = new Handler(Looper.getMainLooper());
@@ -130,7 +130,7 @@ final class ListeningSession {
                 }
                 Settings current = settings;
                 if (applied != current) {
-                    dsp.configure(current.bands(), current.gain(), current.noise(),
+                    dsp.configure(current.bands(), current.frequencies(), current.widths(), current.gain(), current.noise(),
                             current.voice(), current.dynamics(), current.impulse());
                     applied = current;
                 }
