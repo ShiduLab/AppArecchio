@@ -34,9 +34,13 @@ Lo script compila il progetto e genera un APK firmato con una chiave locale. Per
 
 ## Schermate
 
-![Guadagno, BustaBanda e riduzione rumore](schermate/AppArecchio-BustaBanda.png)
+![BustaBanda in verticale: prime cinque bande, reset e scorrimento](schermate/AppArecchio-BustaBanda-J.1.12.png)
 
-![Controlli di ascolto ambientale e profili locali](schermate/AppArecchio-Controlli.png)
+![Riduzione rumore, ascolto ambientale, profili e supporto](schermate/AppArecchio-Controlli-J.1.12.png)
+
+## Novità della J.1.12
+
+Dieci bande con scorrimento a dito, profili precedenti compatibili e icona Pluto su fondo nero.
 
 ## Novità della J.1.12
 
