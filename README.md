@@ -10,9 +10,9 @@ BustaBanda ha dieci bande parametriche, con guadagno, frequenza centrale e Q reg
 
 L’app offre tre livelli di riduzione del rumore, enfasi della voce, compressione per rendere più udibili i suoni deboli e attenuazione dei picchi improvvisi. I profili salvano localmente queste regolazioni. Un limitatore contiene i picchi digitali e la sessione si arresta quando la limitazione persiste.
 
-## Samsung Galaxy A15 e requisiti Android
+## Requisiti Android
 
-Il Samsung Galaxy A15 è il dispositivo di riferimento. Il manifesto dichiara Android 11 o successivo, API minima 30, e target API 35. Servono il microfono integrato e cuffie riconosciute da Android. L’app prevede l’uscita jack da 3,5 mm, dispositivi USB riconosciuti come cuffie e dispositivi Bluetooth esposti da Android come A2DP o LE Audio. Il percorso Bluetooth per le chiamate SCO è escluso.
+Il manifesto dichiara Android 11 o successivo, API minima 30, e target API 35. Servono il microfono integrato e cuffie riconosciute da Android. L’app prevede l’uscita jack da 3,5 mm, dispositivi USB riconosciuti come cuffie e dispositivi Bluetooth esposti da Android come A2DP o LE Audio. Il percorso Bluetooth per le chiamate SCO è escluso.
 
 Collega le cuffie, abbassa il volume multimediale e avvia l’ascolto dall’app aperta. Android richiede il permesso del microfono e può chiedere quello delle notifiche. Il servizio in primo piano consente di continuare l’ascolto mentre si usano altre app. L’app verifica il percorso audio e richiede l’arresto se cambia.
 
