@@ -1,5 +1,7 @@
 # AppArecchio Tattico J.1.12
 
+[Apri il supermanuale interattivo di AppArecchio](https://www.shidulab.org/SofficiWare-ShiduLab/Manuale-AppArecchio.html)
+
 AppArecchio è un’app Android di ShiduLab per regolare l’ascolto di voci e suoni nell’ambiente. Usa il microfono integrato del telefono e riproduce il segnale in mono nelle cuffie. L’elaborazione avviene sul dispositivo. L’app conserva i profili nella memoria privata, non salva registrazioni e non richiede accesso alla rete.
 
 [Scarica APK J.1.12](downloads/AppArecchio-J.1.12.apk) · [Pagina di AppArecchio su ShiduLab](https://www.shidulab.org/SofficiWare-ShiduLab/AppArecchio-Tattico.html)
