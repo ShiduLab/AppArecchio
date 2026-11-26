@@ -2,13 +2,13 @@
 
 ## Versioni e manuale
 
-**J.1.18 · Collaudo** · [Scarica l’APK](downloads/AppArecchio-J.1.18.apk) · [Sorgenti e compilazione](collaudo/J.1.18) · [Schermata interattiva](https://www.shidulab.org/SofficiWare-ShiduLab/Manuale-AppArecchio.html#mappa)
+**J.1.18 · Beta** · [Scarica l’APK beta](downloads/AppArecchio-J.1.18.apk) · [Sorgenti e compilazione](collaudo/J.1.18) · [Schermata interattiva](https://www.shidulab.org/SofficiWare-ShiduLab/Manuale-AppArecchio.html#mappa)
 
 **J.1.12 · Stabile** · [Scarica l’APK](downloads/AppArecchio-J.1.12.apk) · [Pagina di AppArecchio su ShiduLab](https://www.shidulab.org/SofficiWare-ShiduLab/AppArecchio-Tattico.html)
 
 ### Novità della J.1.18
 
-1. **Traduci ambiente** usa il riconoscimento vocale di Android e la traduzione gratuita sul dispositivo. Il primo uso può richiedere Internet per scaricare i modelli. Servono Android 13 o successivo e un riconoscitore compatibile. Per il rilevamento automatico serve Android 14 o successivo. La prova dal microfono al testo italiano resta da completare su un telefono compatibile.
+1. **Traduci ambiente** usa il riconoscimento vocale di Android e la traduzione gratuita sul dispositivo. Il primo uso può richiedere Internet per scaricare i modelli. Servono Android 13 o successivo e un riconoscitore compatibile. Per il rilevamento automatico serve Android 14 o successivo.
 2. **Dialogo, voce e file** apre i comandi di prossimità e Internet. Comprende richieste di consenso, voce, messaggi e scambio di file tra telefoni vicini. Il browser permette di entrare con un invito, leggere e scrivere in stanza.
 3. **VoiceBox** conserva bozze di testo e vocali sul telefono. La posizione si condivide su richiesta e con conferma.
 4. **Supermanuale** con schermata completa, rimandi ai controlli e cellulare TePorto per navigare su ShiduLab.
@@ -45,11 +45,9 @@ I sorgenti Java si trovano in `src`, le risorse Android in `res`. Per compilare 
 
 Lo script compila il progetto e genera un APK firmato con una chiave locale. Per aggiornare una build già installata occorre la stessa chiave. Conserva la chiave generata fuori dal controllo versione.
 
-## Schermate
+## Schermata e comandi della beta
 
-![BustaBanda in verticale: prime cinque bande, reset e scorrimento](schermate/AppArecchio-BustaBanda-J.1.12.png)
-
-![Riduzione rumore, ascolto ambientale, profili e supporto](schermate/AppArecchio-Controlli-J.1.12.png)
+[Apri la schermata completa con il reparto voce](https://www.shidulab.org/SofficiWare-ShiduLab/Manuale-AppArecchio.html#mappa).
 
 ## Novità della J.1.12
 

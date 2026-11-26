@@ -1,4 +1,4 @@
-# AppArecchio J.1.18 · Collaudo
+# AppArecchio J.1.18 · Beta
 
 Progetto Android con riconoscimento vocale sul dispositivo e ML Kit per la traduzione. Usa JDK 21, Android SDK Platform 35, Build Tools 35 e Gradle 8.9. Da questa cartella:
 
