@@ -1,10 +1,21 @@
-# AppArecchio Tattico J.1.12
+# AppArecchio Tattico
 
-[Apri il supermanuale interattivo di AppArecchio](https://www.shidulab.org/SofficiWare-ShiduLab/Manuale-AppArecchio.html)
+## Versioni e manuale
+
+**J.1.18 · Collaudo** · [Scarica l’APK](downloads/AppArecchio-J.1.18.apk) · [Sorgenti e compilazione](collaudo/J.1.18) · [Schermata interattiva](https://www.shidulab.org/SofficiWare-ShiduLab/Manuale-AppArecchio.html#mappa)
+
+**J.1.12 · Stabile** · [Scarica l’APK](downloads/AppArecchio-J.1.12.apk) · [Pagina di AppArecchio su ShiduLab](https://www.shidulab.org/SofficiWare-ShiduLab/AppArecchio-Tattico.html)
+
+### Novità della J.1.18
+
+1. **Traduci ambiente** usa il riconoscimento vocale di Android e la traduzione gratuita sul dispositivo. Il primo uso può richiedere Internet per scaricare i modelli. Servono Android 13 o successivo e un riconoscitore compatibile. Per il rilevamento automatico serve Android 14 o successivo. La prova dal microfono al testo italiano resta da completare su un telefono compatibile.
+2. **Dialogo, voce e file** apre i comandi di prossimità e Internet. Comprende richieste di consenso, voce, messaggi e scambio di file tra telefoni vicini. Il browser permette di entrare con un invito, leggere e scrivere in stanza.
+3. **VoiceBox** conserva bozze di testo e vocali sul telefono. La posizione si condivide su richiesta e con conferma.
+4. **Supermanuale** con schermata completa, rimandi ai controlli e cellulare TePorto per navigare su ShiduLab.
+
+## Ascolto ambientale e versione stabile
 
 AppArecchio è un’app Android di ShiduLab per regolare l’ascolto di voci e suoni nell’ambiente. Usa il microfono integrato del telefono e riproduce il segnale in mono nelle cuffie. L’elaborazione avviene sul dispositivo. L’app conserva i profili nella memoria privata, non salva registrazioni e non richiede accesso alla rete.
-
-[Scarica APK J.1.12](downloads/AppArecchio-J.1.12.apk) · [Pagina di AppArecchio su ShiduLab](https://www.shidulab.org/SofficiWare-ShiduLab/AppArecchio-Tattico.html)
 
 ## BustaBanda e controlli
 
@@ -39,10 +50,6 @@ Lo script compila il progetto e genera un APK firmato con una chiave locale. Per
 ![BustaBanda in verticale: prime cinque bande, reset e scorrimento](schermate/AppArecchio-BustaBanda-J.1.12.png)
 
 ![Riduzione rumore, ascolto ambientale, profili e supporto](schermate/AppArecchio-Controlli-J.1.12.png)
-
-## Novità della J.1.12
-
-Dieci bande con scorrimento a dito, profili precedenti compatibili e icona Pluto su fondo nero.
 
 ## Novità della J.1.12
 
