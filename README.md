@@ -2,11 +2,13 @@
 
 ## Versioni e manuale
 
-**J.1.19 · Beta** · [Scarica l’APK beta](downloads/AppArecchio-J.1.19.apk) · [Sorgenti e compilazione](beta/J.1.19) · [Schermata interattiva](https://www.shidulab.org/SofficiWare-ShiduLab/Manuale-AppArecchio.html#mappa)
+**J.1.20 · Beta** · [Scarica l’APK beta](downloads/AppArecchio-J.1.20.apk) · [Sorgenti e compilazione](beta/J.1.20) · [Schermata interattiva](https://www.shidulab.org/SofficiWare-ShiduLab/Manuale-AppArecchio.html#mappa)
 
 **J.1.12 · Stabile** · [Scarica l’APK](downloads/AppArecchio-J.1.12.apk) · [Pagina di AppArecchio su ShiduLab](https://www.shidulab.org/SofficiWare-ShiduLab/AppArecchio-Tattico.html)
 
-### Novità della J.1.19
+### Novità della J.1.20
+
+BustaBanda esclude la frequenza selezionata con un filtro più stretto. La trascrizione LIVE passa al riconoscitore audio continuo e presenta il testo italiano senza numerazione.
 
 1. **Ambiente LIVE** separa **Trascrivi ambiente** e **Traduci ambiente**. L’italiano è predefinito. Puoi scegliere anche inglese, arabo standard, mandarino o spagnolo. Il pannello mostra parole provvisorie, testo confermato e segnalazioni degli eventi sonori con soglia regolabile.
 2. **Dialogo, voce e file** apre i comandi di prossimità e Internet. Comprende richieste di consenso, voce, messaggi e scambio di file tra telefoni vicini. Il browser permette di entrare con un invito, leggere e scrivere in stanza.
