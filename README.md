@@ -11,7 +11,7 @@
 1. **Traduci ambiente** usa il riconoscimento vocale di Android e la traduzione gratuita sul dispositivo. Il primo uso può richiedere Internet per scaricare i modelli. Servono Android 13 o successivo e un riconoscitore compatibile. Per il rilevamento automatico serve Android 14 o successivo.
 2. **Dialogo, voce e file** apre i comandi di prossimità e Internet. Comprende richieste di consenso, voce, messaggi e scambio di file tra telefoni vicini. Il browser permette di entrare con un invito, leggere e scrivere in stanza.
 3. **VoiceBox** conserva bozze di testo e vocali sul telefono. La posizione si condivide su richiesta e con conferma.
-4. **Supermanuale** con schermata completa, rimandi ai controlli e cellulare TePorto per navigare su ShiduLab.
+4. **Manuale** con schermata completa, rimandi ai controlli e cellulare TePorto per navigare su ShiduLab.
 
 ## Ascolto ambientale e versione stabile
 
