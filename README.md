@@ -2,11 +2,13 @@
 
 ## Versioni e manuale
 
-**J.1.21 · Beta** · [Scarica l’APK beta](downloads/AppArecchio-J.1.21.apk) · [Sorgenti e compilazione](beta/J.1.21) · [Schermata interattiva](https://www.shidulab.org/SofficiWare-ShiduLab/Manuale-AppArecchio.html#mappa)
+**J.1.23 · Beta** · [Scarica l’APK beta](downloads/AppArecchio-J.1.23.apk) · [Sorgenti e compilazione](beta/J.1.23) · [Schermata interattiva](https://www.shidulab.org/SofficiWare-ShiduLab/Manuale-AppArecchio.html#mappa)
 
 **J.1.12 · Stabile** · [Scarica l’APK](downloads/AppArecchio-J.1.12.apk) · [Pagina di AppArecchio su ShiduLab](https://www.shidulab.org/SofficiWare-ShiduLab/AppArecchio-Tattico.html)
 
-### Novità della J.1.21
+### Novità della J.1.23
+
+**Emergenza** apre la rubrica e accoda il messaggio sul telefono. Testo e ultima posizione disponibile viaggiano via SMS, il vocale via MMS. Il pulsante 112 chiede due conferme prima di aprire il tastierino. [Istruzioni](https://www.shidulab.org/SofficiWare-ShiduLab/Manuale-AppArecchio.html#emergenza).
 
 BustaBanda esclude la frequenza selezionata con un filtro più stretto. La trascrizione LIVE passa al riconoscitore audio continuo e presenta il testo italiano senza numerazione. Gli eventi sonori si attivano con un pulsante dedicato e sono spenti all’avvio.
 
