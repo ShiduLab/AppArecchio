@@ -2,13 +2,13 @@
 
 ## Versioni e manuale
 
-**J.1.18 · Beta** · [Scarica l’APK beta](downloads/AppArecchio-J.1.18.apk) · [Sorgenti e compilazione](collaudo/J.1.18) · [Schermata interattiva](https://www.shidulab.org/SofficiWare-ShiduLab/Manuale-AppArecchio.html#mappa)
+**J.1.19 · Beta** · [Scarica l’APK beta](downloads/AppArecchio-J.1.19.apk) · [Sorgenti e compilazione](beta/J.1.19) · [Schermata interattiva](https://www.shidulab.org/SofficiWare-ShiduLab/Manuale-AppArecchio.html#mappa)
 
 **J.1.12 · Stabile** · [Scarica l’APK](downloads/AppArecchio-J.1.12.apk) · [Pagina di AppArecchio su ShiduLab](https://www.shidulab.org/SofficiWare-ShiduLab/AppArecchio-Tattico.html)
 
-### Novità della J.1.18
+### Novità della J.1.19
 
-1. **Traduci ambiente** usa il riconoscimento vocale di Android e la traduzione gratuita sul dispositivo. Il primo uso può richiedere Internet per scaricare i modelli. Servono Android 13 o successivo e un riconoscitore compatibile. Per il rilevamento automatico serve Android 14 o successivo.
+1. **Ambiente LIVE** separa **Trascrivi ambiente** e **Traduci ambiente**. L’italiano è predefinito. Puoi scegliere anche inglese, arabo standard, mandarino o spagnolo. Il pannello mostra parole provvisorie, testo confermato e segnalazioni degli eventi sonori con soglia regolabile.
 2. **Dialogo, voce e file** apre i comandi di prossimità e Internet. Comprende richieste di consenso, voce, messaggi e scambio di file tra telefoni vicini. Il browser permette di entrare con un invito, leggere e scrivere in stanza.
 3. **VoiceBox** conserva bozze di testo e vocali sul telefono. La posizione si condivide su richiesta e con conferma.
 4. **Manuale** con schermata completa, rimandi ai controlli e cellulare TePorto per navigare su ShiduLab.
