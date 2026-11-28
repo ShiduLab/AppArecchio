@@ -1,0 +1,42 @@
+plugins {
+    id 'com.android.application' version '8.7.3'
+}
+def service = providers.gradleProperty('occhioService').orElse('').get().trim()
+def serviceUri = service.isEmpty() ? null : new URI(service.endsWith('/') ? service : service + '/')
+if (serviceUri != null && (serviceUri.scheme != 'https' || !serviceUri.host || serviceUri.userInfo || serviceUri.query || serviceUri.fragment)) {
+    throw new GradleException('occhioService must be an HTTPS base URL.')
+}
+android {
+    buildFeatures { buildConfig = true }
+    namespace 'org.shidulab.apparecchio'
+    compileSdk 35
+    buildToolsVersion '35.0.0'
+    defaultConfig {
+        applicationId 'org.shidulab.apparecchio'
+        minSdk 30
+        targetSdk 35
+        versionCode 27
+        versionName 'J.1.24'
+        buildConfigField 'String', 'OCCHIO_SERVICE', groovy.json.JsonOutput.toJson(serviceUri?.toString() ?: '')
+        manifestPlaceholders.occhioInviteHost = serviceUri?.host ?: 'example.invalid'
+        manifestPlaceholders.occhioInvitePath = (serviceUri?.path ?: '/') + 'invito'
+    }
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+dependencies {
+    implementation 'com.google.android.gms:play-services-nearby:19.3.0'
+    implementation 'com.google.mlkit:translate:17.0.3'
+    implementation 'org.tensorflow:tensorflow-lite-task-audio:0.4.4'
+    implementation 'androidx.work:work-runtime:2.10.0'
+}
