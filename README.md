@@ -2,13 +2,13 @@
 
 ## Versioni e manuale
 
-**J.1.25 · Beta** · [Scarica l’APK beta](https://github.com/ShiduLab/AppArecchio/raw/J.1.25/downloads/AppArecchio-J.1.25.apk) · [Versione su GitHub](https://github.com/ShiduLab/AppArecchio/tree/J.1.25) · [Sorgenti e compilazione](beta/J.1.25) · [Schermata interattiva](https://www.shidulab.org/SofficiWare-ShiduLab/Manuale-AppArecchio.html#mappa)
+**J.1.26 · Beta** · [Scarica l’APK beta](https://github.com/ShiduLab/AppArecchio/raw/J.1.26/downloads/AppArecchio-J.1.26.apk) · [Versione su GitHub](https://github.com/ShiduLab/AppArecchio/tree/J.1.26) · [Sorgenti e compilazione](beta/J.1.26) · [Schermata interattiva](https://www.shidulab.org/SofficiWare-ShiduLab/Manuale-AppArecchio.html#mappa)
 
 **J.1.12 · Stabile** · [Scarica l’APK](downloads/AppArecchio-J.1.12.apk) · [Pagina di AppArecchio su ShiduLab](https://www.shidulab.org/SofficiWare-ShiduLab/AppArecchio-Tattico.html)
 
-### Novità della J.1.25
+### Novità della J.1.26
 
-In **Comunica** puoi creare una nuova stanza Internet anche quando ne hai già una aperta. Il link e lo stato della connessione compaiono sotto i comandi. Nel browser la chat comune ha i partecipanti a lato. Seleziona un nome per aprire una conversazione privata.
+Sotto **Guadagno**, il cursore **Boost volume** aggiunge fino al 100% di ampiezza prima del limitatore. Sotto **Guadagno**, il cursore **Boost volume** aggiunge fino al 100% di ampiezza prima del limitatore. In **Comunica** puoi creare una nuova stanza Internet anche quando ne hai già una aperta. Il link e lo stato della connessione compaiono sotto i comandi. Nel browser la chat comune ha i partecipanti a lato. Seleziona un nome per aprire una conversazione privata.
 
 **Emergenza** apre la rubrica e accoda il messaggio sul telefono. Testo e ultima posizione disponibile viaggiano via SMS, il vocale via MMS. Il pulsante 112 chiede due conferme prima di aprire il tastierino. [Istruzioni](https://www.shidulab.org/SofficiWare-ShiduLab/Manuale-AppArecchio.html#emergenza).
 
